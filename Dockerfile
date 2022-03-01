@@ -9,7 +9,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
     MEMORY_LIMIT=256M \
     MAX_EXECUTION_TIME=90 \
     PORT=9000 \
-    COMPOSER_HOME=/var/.composer
+    COMPOSER_HOME=/var/.composer \
+    PHP_INI_DIR=/usr/local/etc/php
 
 # PHP extensions
 RUN apt-get update -q -y \
@@ -57,12 +58,18 @@ RUN mkdir -p $COMPOSER_HOME
 # Set timezone
 RUN echo $TIMEZONE > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
 
+# Create PHP conf.d directory
+RUN mkdir -p $PHP_INI_DIR/conf.d
+
+# Use the default production configuration
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
 # Set some php.ini config
-RUN echo "date.timezone = $TIMEZONE" >> /usr/local/etc/php/php.ini \
- && echo "memory_limit = $MEMORY_LIMIT" >> /usr/local/etc/php/php.ini \
- && echo "realpath_cache_size = 256k" >> /usr/local/etc/php/php.ini \
- && echo "display_errors = Off" >> /usr/local/etc/php/php.ini \
- && echo "max_execution_time = $MAX_EXECUTION_TIME" >> /usr/local/etc/php/php.ini
+RUN echo "date.timezone = $TIMEZONE" >> $PHP_INI_DIR/php.ini \
+ && echo "memory_limit = $MEMORY_LIMIT" >> $PHP_INI_DIR/php.ini \
+ && echo "realpath_cache_size = 256k" >> $PHP_INI_DIR/php.ini \
+ && echo "display_errors = Off" >> $PHP_INI_DIR/php.ini \
+ && echo "max_execution_time = $MAX_EXECUTION_TIME" >> $PHP_INI_DIR/php.ini
 
 # Disable daemonizeing php-fpm
 #RUN sed -i "s@^;daemonize = yes*@daemonize = no@" /usr/local/etc/php-fpm.conf
@@ -78,11 +85,11 @@ RUN sed -i "s@^listen = 127.0.0.1:9000@listen = $PORT@" /usr/local/etc/php-fpm.d
 # Get Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin && mv /usr/local/bin/composer.phar /usr/local/bin/composer
 
-#/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
-#ADD config/opcache.ini /usr/local/php7/etc/conf.d/opcache.ini
+#$PHP_INI_DIR/conf.d/docker-php-ext-opcache.ini
+#ADD config/opcache.ini /usr/local/php8/etc/conf.d/opcache.ini
 
-VOLUME /var/www
-WORKDIR /var/www
+#VOLUME /var/www
+WORKDIR /var/www/html
 
 EXPOSE 9000
 CMD ["php-fpm"]
