@@ -19,10 +19,10 @@ RUN apt-get update -q -y \
         libjpeg62-turbo-dev \
         libxpm-dev \
         libpng-dev \
-        libpng12-dev \
         libicu-dev \
         libxslt1-dev \
-        mysql-client \
+        libonig-dev \
+        mariadb-client \
         curl \
         wget \
         ca-certificates \
@@ -32,23 +32,24 @@ RUN apt-get update -q -y \
         acl \
         sudo \
         tree \
+        libzip-dev \
         unzip \
         && rm -rf /var/lib/apt/lists/*
 
 # Redis
-RUN pecl install redis-5.1.1 \
-    && pecl install xdebug-2.8.1 \
+RUN pecl install redis \
+    && pecl install xdebug \
     && docker-php-ext-enable redis xdebug
 
 # Memcached
 RUN apt-get update && apt-get install -y libmemcached-dev zlib1g-dev \
-    && pecl install memcached-3.1.5 \
+    && pecl install memcached \
     && docker-php-ext-enable memcached
     
 # Install and configure php plugins
 RUN docker-php-ext-configure mysqli --with-mysqli=mysqlnd \
  && docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
- && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/ --with-xpm-dir=/usr/include/ --enable-gd-native-ttf --enable-gd-jis-conv \
+ && docker-php-ext-configure gd --enable-gd-jis-conv \
  && docker-php-ext-install exif gd mbstring intl xsl zip mysqli pdo_mysql \
  && docker-php-ext-enable opcache
 
