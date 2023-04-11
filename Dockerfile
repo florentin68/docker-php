@@ -1,5 +1,5 @@
-# PHP 8.0
-ARG VERSION=8.0
+# PHP 8.1
+ARG VERSION=8.1
 FROM php:$VERSION-fpm
 
 # Set defaults for variables used by run.sh
@@ -89,7 +89,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 #$PHP_INI_DIR/conf.d/docker-php-ext-opcache.ini
 #ADD config/opcache.ini /usr/local/php8/etc/conf.d/opcache.ini
 
-#VOLUME /var/www
+VOLUME /var/www/html
 WORKDIR /var/www/html
 
 EXPOSE 9000
