@@ -25,8 +25,6 @@ RUN apt-get update -q -y \
         mariadb-client \
         curl \
         wget \
-        usermod \
-        groupmod \
         ca-certificates \
 #        less \
 #        vim \
@@ -91,8 +89,11 @@ ARG UID=900
 ARG GID=100
 #ENV UID=${UID}
 #ENV GID=${GID}
-RUN usermod  --uid $UID $UNAME
-RUN groupmod --gid $GID $UGROUP
+#RUN usermod  --uid $UID $UNAME
+#RUN groupmod --gid $GID $UGROUP
+RUN groupadd -g $GID $UGROUP \
+ && useradd -m -u $UID -g $UGROUP $UNAME
+USER go
 
 # Get Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin && mv /usr/local/bin/composer.phar /usr/local/bin/composer
@@ -105,3 +106,4 @@ WORKDIR /var/www/html
 
 EXPOSE 9000
 CMD ["php-fpm"]
+USER www-data
