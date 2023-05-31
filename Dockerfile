@@ -73,7 +73,7 @@ RUN echo "date.timezone = $TIMEZONE" >> $PHP_INI_DIR/php.ini \
  && echo "max_execution_time = $MAX_EXECUTION_TIME" >> $PHP_INI_DIR/php.ini
 
 # Disable daemonizeing php-fpm
-#RUN sed -i "s@^;daemonize = yes*@daemonize = no@" /usr/local/etc/php-fpm.conf
+RUN sed -i "s@^;daemonize = yes*@daemonize = no@" /usr/local/etc/php-fpm.conf
 
 # Add pid file to be able to restart php-fpm
 RUN sed -i "s@^\[global\]@\[global\]\n\npid = /run/php-fpm.pid@" /usr/local/etc/php-fpm.conf
@@ -82,6 +82,15 @@ RUN sed -i "s@^\[global\]@\[global\]\n\npid = /run/php-fpm.pid@" /usr/local/etc/
 RUN sed -i "s@^listen = 127.0.0.1:9000@listen = $PORT@" /usr/local/etc/php-fpm.d/www.conf.default \
  && sed -i "s@^user = nobody@user = www-data@" /usr/local/etc/php-fpm.d/www.conf.default \
  && sed -i "s@^group = nobody@group = www-data@" /usr/local/etc/php-fpm.d/www.conf.default
+
+ARG UNAME=www-data
+ARG UGROUP=www-data
+ARG UID=900
+ARG GID=100
+#ENV UID=${UID}
+#ENV GID=${GID}
+RUN usermod  --uid $UID $UNAME
+RUN groupmod --gid $GID $UGROUP
 
 # Get Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin && mv /usr/local/bin/composer.phar /usr/local/bin/composer
