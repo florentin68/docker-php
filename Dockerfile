@@ -25,6 +25,8 @@ RUN apt-get update -q -y \
         mariadb-client \
         curl \
         wget \
+        usermod \
+        groupmod \
         ca-certificates \
 #        less \
 #        vim \
