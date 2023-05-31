@@ -83,18 +83,6 @@ RUN sed -i "s@^listen = 127.0.0.1:9000@listen = $PORT@" /usr/local/etc/php-fpm.d
  && sed -i "s@^user = nobody@user = www-data@" /usr/local/etc/php-fpm.d/www.conf.default \
  && sed -i "s@^group = nobody@group = www-data@" /usr/local/etc/php-fpm.d/www.conf.default
 
-ARG UNAME=www-data
-ARG UGROUP=www-data
-ARG UID=900
-ARG GID=100
-#ENV UID=${UID}
-#ENV GID=${GID}
-#RUN usermod  --uid $UID $UNAME
-#RUN groupmod --gid $GID $UGROUP
-RUN groupadd -g $GID $UGROUP \
- && useradd -m -u $UID -g $UGROUP $UNAME
-USER go
-
 # Get Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin && mv /usr/local/bin/composer.phar /usr/local/bin/composer
 
