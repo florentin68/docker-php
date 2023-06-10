@@ -94,5 +94,6 @@ WORKDIR /var/www/html
 
 EXPOSE 9000
 RUN mkdir -p /var/run/php-fpm
+RUN chown www-data:www-data /var/run/php-fpm
 CMD ["php-fpm", "-F"]
 USER www-data
