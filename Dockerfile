@@ -93,7 +93,11 @@ VOLUME /var/www/html
 WORKDIR /var/www/html
 
 EXPOSE 9000
+
+# PID file
 RUN mkdir -p /var/run/php-fpm
-RUN chown www-data:www-data /var/run/php-fpm
+RUN chown -R www-data:www-data /var/run/php-fpm
+RUN chmod -R ug+rw /var/run/php-fpm
+
 CMD ["php-fpm", "-F"]
 USER www-data
