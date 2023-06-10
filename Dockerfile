@@ -76,7 +76,7 @@ RUN echo "date.timezone = $TIMEZONE" >> $PHP_INI_DIR/php.ini \
 RUN sed -i "s@^;daemonize = yes*@daemonize = no@" /usr/local/etc/php-fpm.conf
 
 # Add pid file to be able to restart php-fpm
-RUN sed -i "s@^\[global\]@\[global\]\n\npid = /run/php-fpm.pid@" /usr/local/etc/php-fpm.conf
+RUN sed -i "s@^\[global\]@\[global\]\n\npid = /var/run/php-fpm/php-fpm.pid@" /usr/local/etc/php-fpm.conf
 
 # Set listen socket for php-fpm
 RUN sed -i "s@^listen = 127.0.0.1:9000@listen = $PORT@" /usr/local/etc/php-fpm.d/www.conf.default \
@@ -93,5 +93,6 @@ VOLUME /var/www/html
 WORKDIR /var/www/html
 
 EXPOSE 9000
-CMD ["php-fpm"]
+RUN mkdir -p /var/run/php-fpm
+CMD ["php-fpm", "-F"]
 USER www-data
