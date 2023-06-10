@@ -5,7 +5,7 @@ FROM php:$VERSION-fpm
 # Set defaults for variables used by run.sh
 # If you change MAX_EXECUTION TIME, also change fastcgi_read_timeout accordingly in nginx!
 ENV DEBIAN_FRONTEND=noninteractive \
-    TIMEZONE=Europe\Paris \
+    TIMEZONE=Europe/Paris \
     MEMORY_LIMIT=256M \
     MAX_EXECUTION_TIME=90 \
     PORT=9000 \
@@ -86,8 +86,7 @@ RUN sed -i "s@^listen = 127.0.0.1:9000@listen = $PORT@" /usr/local/etc/php-fpm.d
 # Get Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin && mv /usr/local/bin/composer.phar /usr/local/bin/composer
 
-#$PHP_INI_DIR/conf.d/docker-php-ext-opcache.ini
-#ADD config/opcache.ini /usr/local/php8/etc/conf.d/opcache.ini
+#ADD config/opcache.ini $PHP_INI_DIR/conf.d/docker-php-ext-opcache.ini
 
 VOLUME /var/www/html
 WORKDIR /var/www/html
@@ -97,7 +96,7 @@ EXPOSE 9000
 # PID file
 RUN mkdir -p /var/run/php-fpm
 RUN chown -R www-data:www-data /var/run/php-fpm
-RUN chmod -R ug+rw /var/run/php-fpm
+RUN chmod -R uga+rw /var/run/php-fpm
 
 USER www-data
 CMD ["php-fpm", "-F"]
