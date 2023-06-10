@@ -1,5 +1,5 @@
-# PHP 8.1
-ARG VERSION=8.1
+# PHP 8.2
+ARG VERSION=8.2
 FROM php:$VERSION-fpm
 
 # Set defaults for variables used by run.sh
