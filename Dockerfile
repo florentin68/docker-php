@@ -29,6 +29,7 @@ RUN apt-get update -q -y \
 #        less \
 #        vim \
 #        git \
+        shadow \
         acl \
         sudo \
         tree \
@@ -87,6 +88,8 @@ RUN sed -i "s@^listen = 127.0.0.1:9000@listen = $PORT@" /usr/local/etc/php-fpm.d
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin && mv /usr/local/bin/composer.phar /usr/local/bin/composer
 
 #ADD config/opcache.ini $PHP_INI_DIR/conf.d/docker-php-ext-opcache.ini
+
+RUN usermod -u 101 www-data && groupmod -g 101 www-data
 
 VOLUME /var/www/html
 WORKDIR /var/www/html
