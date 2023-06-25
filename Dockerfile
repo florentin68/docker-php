@@ -1,6 +1,6 @@
 # PHP 8.2
 ARG VERSION=8.2
-FROM php:$VERSION-fpm
+FROM php:$VERSION-fpm-bullseye
 
 # Set defaults for variables used by run.sh
 # If you change MAX_EXECUTION TIME, also change fastcgi_read_timeout accordingly in nginx!
