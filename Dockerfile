@@ -29,7 +29,7 @@ RUN apt-get update -q -y \
 #        less \
 #        vim \
 #        git \
-        shadow \
+#        shadow \
         acl \
         sudo \
         tree \
