@@ -14,7 +14,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 # PHP extensions
 RUN apt-get update -q -y \
- && apt-get install -q -y --force-yes --no-install-recommends \
+ && apt-get install -q -y --allow-unauthenticated --allow-downgrades --allow-remove-essential --allow-change-held-packages --no-install-recommends \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libxpm-dev \
@@ -26,6 +26,7 @@ RUN apt-get update -q -y \
         curl \
         wget \
         ca-certificates \
+        apt-utils \
 #        less \
 #        vim \
 #        git \
