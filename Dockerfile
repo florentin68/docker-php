@@ -92,8 +92,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 RUN usermod -u 101 www-data && groupmod -g 101 www-data
 
-VOLUME /var/www/html
-WORKDIR /var/www/html
+VOLUME /var/www
+WORKDIR /var/www
 
 EXPOSE 9000
 
