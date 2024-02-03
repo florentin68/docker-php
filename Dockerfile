@@ -10,8 +10,6 @@ LABEL version="1.1"
 # Set defaults for variables used by run.sh
 # If you change MAX_EXECUTION TIME, also change fastcgi_read_timeout accordingly in nginx!
 ENV DEBIAN_FRONTEND=noninteractive \
-    UID=33 \
-    GID=33 \
     TZ=Europe/Paris \
     MEMORY_LIMIT=256M \
     MAX_EXECUTION_TIME=90 \
@@ -100,14 +98,17 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN usermod -u $UID www-data && groupmod -g $GID www-data
 
 VOLUME /var/www
+
 WORKDIR /var/www
 
-EXPOSE $PORT
+EXPOSE 9000
 
 # PID file
 RUN mkdir -p /var/run/php-fpm
 RUN chown -R www-data:www-data /var/run/php-fpm
 RUN chmod -R uga+rw /var/run/php-fpm
 
-USER www-data
+USER www-data:www-data
+
+# Start PHP FPM
 CMD ["php-fpm", "-F"]
