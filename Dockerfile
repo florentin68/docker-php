@@ -97,7 +97,11 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 #ADD config/opcache.ini $PHP_INI_DIR/conf.d/docker-php-ext-opcache.ini
 
-RUN usermod -u $UID www-data && groupmod -g $GID www-data
+# Create user, directories and update permissions
+RUN addgroup -g $GID www-data \
+    && adduser -D -H -h /var/www -s /sbin/nologin -G www-data -u $UID www-data \
+    && mkdir -p /var/www \
+    && chown -R www-data:www-data /var/www
 
 VOLUME /var/www
 
