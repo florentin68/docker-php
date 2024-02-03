@@ -8,7 +8,7 @@ LABEL website="www.munschflorentin.fr"
 LABEL version="1.1"
 
 ARG UID=82 \
-    PID=82
+    GID=82
 
 # Set defaults for variables used by run.sh
 # If you change MAX_EXECUTION TIME, also change fastcgi_read_timeout accordingly in nginx!
