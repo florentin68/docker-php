@@ -10,6 +10,8 @@ LABEL version="1.1"
 # Set defaults for variables used by run.sh
 # If you change MAX_EXECUTION TIME, also change fastcgi_read_timeout accordingly in nginx!
 ENV DEBIAN_FRONTEND=noninteractive \
+    UID=33 \
+    PID=33 \
     TZ=Europe/Paris \
     MEMORY_LIMIT=256M \
     MAX_EXECUTION_TIME=90 \
