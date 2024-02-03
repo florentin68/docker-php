@@ -7,12 +7,14 @@ LABEL company="KMSF"
 LABEL website="www.munschflorentin.fr"
 LABEL version="1.1"
 
-ARG UID=33 \
-    PID=33
+ARG UID=82 \
+    PID=82
 
 # Set defaults for variables used by run.sh
 # If you change MAX_EXECUTION TIME, also change fastcgi_read_timeout accordingly in nginx!
 ENV DEBIAN_FRONTEND=noninteractive \
+    UID=${UID} \
+    GID=${GID} \
     TZ=Europe/Paris \
     MEMORY_LIMIT=256M \
     MAX_EXECUTION_TIME=90 \
@@ -99,8 +101,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 #ADD config/opcache.ini $PHP_INI_DIR/conf.d/docker-php-ext-opcache.ini
 
 # Create user, directories and update permissions
-RUN addgroup -g $GID www-data \
-    && adduser -D -H -h /var/www -s /sbin/nologin -G www-data -u $UID www-data \
+RUN usermod -u $UID www-data && groupmod -g $GID www-data \
     && mkdir -p /var/www \
     && chown -R www-data:www-data /var/www
 
