@@ -2,10 +2,17 @@
 ARG VERSION=8.2
 FROM php:$VERSION-fpm-bullseye
 
+LABEL authors="Florentin Munsch <flo.m68@gmailc.om>"
+LABEL company="KMSF"
+LABEL website="www.munschflorentin.fr"
+LABEL version="1.1"
+
 # Set defaults for variables used by run.sh
 # If you change MAX_EXECUTION TIME, also change fastcgi_read_timeout accordingly in nginx!
 ENV DEBIAN_FRONTEND=noninteractive \
-    TIMEZONE=Europe/Paris \
+    UID=33 \
+    GID=33 \
+    TZ=Europe/Paris \
     MEMORY_LIMIT=256M \
     MAX_EXECUTION_TIME=90 \
     PORT=9000 \
@@ -59,7 +66,7 @@ RUN docker-php-ext-configure mysqli --with-mysqli=mysqlnd \
 RUN mkdir -p $COMPOSER_HOME
 
 # Set timezone
-RUN echo $TIMEZONE > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
+RUN echo $TZ > /etc/timezone && dpkg-reconfigure --frontend $DEBIAN_FRONTEND tzdata
 
 # Create PHP conf.d directory
 RUN mkdir -p $PHP_INI_DIR/conf.d
@@ -68,7 +75,7 @@ RUN mkdir -p $PHP_INI_DIR/conf.d
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 # Set some php.ini config
-RUN echo "date.timezone = $TIMEZONE" >> $PHP_INI_DIR/php.ini \
+RUN echo "date.timezone = $TZ" >> $PHP_INI_DIR/php.ini \
  && echo "memory_limit = $MEMORY_LIMIT" >> $PHP_INI_DIR/php.ini \
  && echo "realpath_cache_size = 256k" >> $PHP_INI_DIR/php.ini \
  && echo "display_errors = Off" >> $PHP_INI_DIR/php.ini \
@@ -90,12 +97,12 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 #ADD config/opcache.ini $PHP_INI_DIR/conf.d/docker-php-ext-opcache.ini
 
-RUN usermod -u 101 www-data && groupmod -g 101 www-data
+RUN usermod -u $UID www-data && groupmod -g $GID www-data
 
 VOLUME /var/www
 WORKDIR /var/www
 
-EXPOSE 9000
+EXPOSE $PORT
 
 # PID file
 RUN mkdir -p /var/run/php-fpm
