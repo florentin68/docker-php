@@ -81,7 +81,7 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 RUN echo "date.timezone = $TZ" >> $PHP_INI_DIR/php.ini \
  && echo "memory_limit = $MEMORY_LIMIT" >> $PHP_INI_DIR/php.ini \
  && echo "realpath_cache_size = 256k" >> $PHP_INI_DIR/php.ini \
- && echo "display_errors = Off" >> $PHP_INI_DIR/php.ini \
+ && echo "display_errors = On" >> $PHP_INI_DIR/php.ini \
  && echo "max_execution_time = $MAX_EXECUTION_TIME" >> $PHP_INI_DIR/php.ini
 
 # Disable daemonizeing php-fpm
