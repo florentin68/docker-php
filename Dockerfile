@@ -114,7 +114,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Create user, directories and update permissions
 RUN usermod -u $UID www-data && groupmod -g $GID www-data \
     && mkdir -p /var/www \
-    && chown -R www-data:www-data /var/www
+    && chown -R www-data:www-data /var/www \
+    && rm -rf /var/log/* \
+    && chown -R www-data:www-data /var/log
 
 VOLUME /var/www
 
