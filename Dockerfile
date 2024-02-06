@@ -78,11 +78,12 @@ RUN mkdir -p $PHP_INI_DIR/conf.d
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 # Set some php.ini config
-RUN echo "date.timezone = $TZ" >> $PHP_INI_DIR/php.ini \
- && echo "memory_limit = $MEMORY_LIMIT" >> $PHP_INI_DIR/php.ini \
- && echo "realpath_cache_size = 256k" >> $PHP_INI_DIR/php.ini \
- && echo "display_errors = On" >> $PHP_INI_DIR/php.ini \
- && echo "max_execution_time = $MAX_EXECUTION_TIME" >> $PHP_INI_DIR/php.ini
+RUN sed -i "s@^;date.timezone =@date.timezone = $TZ@" $PHP_INI_DIR/php.ini \
+ && sed -i "s@^memory_limit = 128M@memory_limit = $MEMORY_LIMIT@" $PHP_INI_DIR/php.ini \
+ && sed -i "s@^max_execution_time = 30@max_execution_time = $MAX_EXECUTION_TIME" $PHP_INI_DIR/php.ini
+
+# Use the default development configuration
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 # Disable daemonizeing php-fpm
 RUN sed -i "s@^;daemonize = yes*@daemonize = no@" /usr/local/etc/php-fpm.conf
