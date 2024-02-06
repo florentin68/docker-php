@@ -90,7 +90,7 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 # Set some php.ini config
 RUN sed -i "s@^;date.timezone =@date.timezone = $TZ@" $PHP_INI_DIR/php.ini \
  && sed -i "s@^memory_limit = 128M@memory_limit = $MEMORY_LIMIT@" $PHP_INI_DIR/php.ini \
- && sed -i "s@^max_execution_time = 30@max_execution_time = $MAX_EXECUTION_TIME" $PHP_INI_DIR/php.ini
+ && sed -i "s@^max_execution_time = 30@max_execution_time = $MAX_EXECUTION_TIME@" $PHP_INI_DIR/php.ini
 
 # Use the default development configuration
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
