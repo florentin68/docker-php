@@ -33,6 +33,7 @@ RUN apt-get update -q -y \
         libxslt1-dev \
         libonig-dev \
         mariadb-client \
+        libpq-dev \
         curl \
         wget \
         ca-certificates \
@@ -62,18 +63,15 @@ RUN apt-get update && apt-get install -y libmemcached-dev zlib1g-dev \
 RUN pecl install apcu \
     && docker-php-ext-enable apcu \
     && pecl clear-cache
-    #&& touch $PHP_INI_DIR/conf.d/apcu.ini \
-    #&& echo "apc.enabled=1" >> $PHP_INI_DIR/conf.d/apcu.ini \
-    #&& echo "apc.enable_cli=1" >> $PHP_INI_DIR/conf.d/apcu.ini
 
 # Install and configure php plugins
 RUN docker-php-ext-configure mysqli --with-mysqli=mysqlnd \
  && docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
  && docker-php-ext-configure gd --enable-gd-jis-conv --with-freetype --with-jpeg \
  && docker-php-ext-install exif gd mbstring intl xsl zip mysqli pdo_mysql \
- && docker-php-ext-enable opcache 
-# && docker-php-ext-configure pgsql \
-# && docker-php-ext-install pgsql pdo_pgsql
+ && docker-php-ext-enable opcache \
+ && docker-php-ext-configure pgsql \
+ && docker-php-ext-install pgsql pdo_pgsql
 
 # Create Composer directory (cache and auth files)
 RUN mkdir -p $COMPOSER_HOME
