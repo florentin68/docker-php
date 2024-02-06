@@ -71,9 +71,9 @@ RUN docker-php-ext-configure mysqli --with-mysqli=mysqlnd \
  && docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
  && docker-php-ext-configure gd --enable-gd-jis-conv --with-freetype --with-jpeg \
  && docker-php-ext-install exif gd mbstring intl xsl zip mysqli pdo_mysql \
- && docker-php-ext-enable opcache \
- && docker-php-ext-configure pgsql \
- && docker-php-ext-install pgsql pdo_pgsql
+ && docker-php-ext-enable opcache 
+# && docker-php-ext-configure pgsql \
+# && docker-php-ext-install pgsql pdo_pgsql
 
 # Create Composer directory (cache and auth files)
 RUN mkdir -p $COMPOSER_HOME
