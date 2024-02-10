@@ -88,7 +88,8 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 # Set some php.ini config
 RUN sed -i "s@^;date.timezone =@date.timezone = $TZ@" $PHP_INI_DIR/php.ini \
  && sed -i "s@^memory_limit = 128M@memory_limit = $MEMORY_LIMIT@" $PHP_INI_DIR/php.ini \
- && sed -i "s@^max_execution_time = 30@max_execution_time = $MAX_EXECUTION_TIME@" $PHP_INI_DIR/php.ini
+ && sed -i "s@^max_execution_time = 30@max_execution_time = $MAX_EXECUTION_TIME@" $PHP_INI_DIR/php.ini \
+ && sed -i "s@^;error_log = php_errors.log@error_log = /var/log/php_errors.log@" $PHP_INI_DIR/php.ini
 
 # Use the default development configuration
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
@@ -114,9 +115,11 @@ RUN usermod -u $UID www-data && groupmod -g $GID www-data \
     && mkdir -p /var/www \
     && chown -R www-data:www-data /var/www \
     && rm -rf /var/log/* \
-    && chown -R www-data:www-data /var/log
+    && chown -R www-data:www-data /var/log \
+    && touch /var/log/php_errors.log
 
 VOLUME /var/www
+VOLUME /var/log/php_errors.log
 
 WORKDIR /var/www
 
