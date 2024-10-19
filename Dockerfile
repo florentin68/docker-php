@@ -92,7 +92,7 @@ RUN sed -i "s@^;date.timezone =@date.timezone = $TZ@" $PHP_INI_DIR/php.ini \
  && sed -i "s@^;error_log = php_errors.log@error_log = /var/log/php_errors.log@" $PHP_INI_DIR/php.ini
 
 # Use the default development configuration
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+#RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 # Disable daemonizeing php-fpm
 RUN sed -i "s@^;daemonize = yes*@daemonize = no@" /usr/local/etc/php-fpm.conf
