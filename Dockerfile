@@ -75,6 +75,7 @@ RUN docker-php-ext-configure mysqli --with-mysqli=mysqlnd \
 
 # Create Composer directory (cache and auth files)
 RUN mkdir -p $COMPOSER_HOME
+RUN chown www-data:www-data $COMPOSER_HOME
 
 # Set timezone
 RUN echo $TZ > /etc/timezone && dpkg-reconfigure --frontend $DEBIAN_FRONTEND tzdata
