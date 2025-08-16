@@ -51,7 +51,7 @@ jobs:
 
       - name: Run Pest tests
         working-directory: tests
-        run: vendor/bin/pest --exit-code ExampleTest.php
+        run: vendor/bin/pest ExampleTest.php
   build:
     name: Build and publish Docker image
     needs: test # On ne build que si les tests passent
