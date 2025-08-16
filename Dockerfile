@@ -1,11 +1,18 @@
-# PHP 8.2
-ARG VERSION=8.2
-FROM php:$VERSION-fpm-bullseye
+# PHP 8.4
+ARG VERSION=8.4
+FROM php:$VERSION-fpm-bookworm
 
-LABEL authors="Florentin Munsch <flo.m68@gmailc.om>"
+# Set labels for the image
+LABEL base_image="php:$VERSION-fpm-bookworm"
+LABEL authors="Florentin Munsch <flo.m68@gmail.com>"
+LABEL maintainer="Florentin Munsch <flo.m68@gmail.com>"
 LABEL company="KMSF"
 LABEL website="www.munschflorentin.fr"
-LABEL version="1.1"
+LABEL version="1.2"
+LABEL date="2025-08-16"
+LABEL description="PHP 8.4 FPM with common extensions and tools for development"
+LABEL license="Unlicense"
+LABEL repository="https://github.com/Florentin68/docker-php"
 
 ARG UID=82 \
     GID=82
@@ -47,6 +54,7 @@ RUN apt-get update -q -y \
         tree \
         libzip-dev \
         unzip \
+        ffmpeg \
         && rm -rf /var/lib/apt/lists/*
 
 # Redis
@@ -85,15 +93,14 @@ RUN mkdir -p $PHP_INI_DIR/conf.d
 
 # Use the default production configuration
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+# Use the default development configuration
+#RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 # Set some php.ini config
 RUN sed -i "s@^;date.timezone =@date.timezone = $TZ@" $PHP_INI_DIR/php.ini \
  && sed -i "s@^memory_limit = 128M@memory_limit = $MEMORY_LIMIT@" $PHP_INI_DIR/php.ini \
  && sed -i "s@^max_execution_time = 30@max_execution_time = $MAX_EXECUTION_TIME@" $PHP_INI_DIR/php.ini \
  && sed -i "s@^;error_log = php_errors.log@error_log = /var/log/php_errors.log@" $PHP_INI_DIR/php.ini
-
-# Use the default development configuration
-#RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 # Disable daemonizeing php-fpm
 RUN sed -i "s@^;daemonize = yes*@daemonize = no@" /usr/local/etc/php-fpm.conf
