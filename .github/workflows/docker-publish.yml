@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4 # MAJ version
+        uses: actions/checkout@v4
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -46,9 +46,11 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
+        working-directory: tests
         run: composer install --no-interaction --prefer-dist
 
       - name: Run Pest tests
+        working-directory: tests
         run: vendor/bin/pest
   build:
     name: Build and publish Docker image
