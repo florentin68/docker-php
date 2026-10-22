@@ -1,5 +1,6 @@
 ARG VERSION=8.5
 FROM php:$VERSION-fpm-bookworm
+ARG VERSION
 
 # Set labels for the image
 LABEL base_image="php:$VERSION-fpm-bookworm"
@@ -123,6 +124,8 @@ RUN usermod -u $UID www-data && groupmod -g $GID www-data \
     && rm -rf /var/log/* \
     && chown -R www-data:www-data /var/log \
     && touch /var/log/php_errors.log
+
+RUN export SUDO_FORCE_REMOVE=yes
 
 RUN apt-get remove -y --purge \
     wget \
