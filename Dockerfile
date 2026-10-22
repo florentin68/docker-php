@@ -1,16 +1,14 @@
-ARG VERSION=8.5
-FROM php:$VERSION-fpm-bookworm
-ARG VERSION
+FROM php:8.5-fpm-bookworm
 
 # Set labels for the image
-LABEL base_image="php:$VERSION-fpm-bookworm"
+LABEL base_image="php:8.5-fpm-bookworm"
 LABEL authors="Florentin Munsch <flo.m68@gmail.com>"
 LABEL maintainer="Florentin Munsch <flo.m68@gmail.com>"
 LABEL company="KMSF"
 LABEL website="www.munschflorentin.fr"
 LABEL version="1.3"
 LABEL date="2026-10-22"
-LABEL description="PHP $VERSION FPM with common extensions and tools for development"
+LABEL description="PHP 8.5 FPM with common extensions and tools for development"
 LABEL license="Unlicense"
 LABEL repository="https://github.com/Florentin68/docker-php"
 
