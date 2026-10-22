@@ -1,5 +1,4 @@
-# PHP 8.4
-ARG VERSION=8.4
+ARG VERSION=8.5
 FROM php:$VERSION-fpm-bookworm
 
 # Set labels for the image
@@ -8,9 +7,9 @@ LABEL authors="Florentin Munsch <flo.m68@gmail.com>"
 LABEL maintainer="Florentin Munsch <flo.m68@gmail.com>"
 LABEL company="KMSF"
 LABEL website="www.munschflorentin.fr"
-LABEL version="1.2"
-LABEL date="2025-08-16"
-LABEL description="PHP 8.4 FPM with common extensions and tools for development"
+LABEL version="1.3"
+LABEL date="2026-10-22"
+LABEL description="PHP $VERSION FPM with common extensions and tools for development"
 LABEL license="Unlicense"
 LABEL repository="https://github.com/Florentin68/docker-php"
 
@@ -27,7 +26,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
     MAX_EXECUTION_TIME=90 \
     PORT=9000 \
     COMPOSER_HOME=/var/.composer \
-    PHP_INI_DIR=/usr/local/etc/php
+    PHP_INI_DIR=/usr/local/etc/php \
+    ENVIRONMENT=production
 
 # PHP extensions
 RUN apt-get update -q -y \
@@ -45,10 +45,6 @@ RUN apt-get update -q -y \
         wget \
         ca-certificates \
         apt-utils \
-#        less \
-#        vim \
-#        git \
-#        shadow \
         acl \
         sudo \
         tree \
@@ -91,10 +87,12 @@ RUN echo $TZ > /etc/timezone && dpkg-reconfigure --frontend $DEBIAN_FRONTEND tzd
 # Create PHP conf.d directory
 RUN mkdir -p $PHP_INI_DIR/conf.d
 
-# Use the default production configuration
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-# Use the default development configuration
-#RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+# Use the default production or development configuration
+RUN if [ "$ENVIRONMENT" = "production" ]; then \
+        mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"; \
+    else \
+        mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"; \
+    fi
 
 # Set some php.ini config
 RUN sed -i "s@^;date.timezone =@date.timezone = $TZ@" $PHP_INI_DIR/php.ini \
@@ -125,6 +123,16 @@ RUN usermod -u $UID www-data && groupmod -g $GID www-data \
     && rm -rf /var/log/* \
     && chown -R www-data:www-data /var/log \
     && touch /var/log/php_errors.log
+
+RUN apt-get remove -y --purge \
+    wget \
+    curl \
+    apt-utils \
+    sudo
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN rm -f /usr/bin/apt-get
 
 VOLUME /var/www
 VOLUME /var/log/php_errors.log
