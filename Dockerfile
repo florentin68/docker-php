@@ -73,8 +73,7 @@ RUN pecl install apcu \
 RUN docker-php-ext-configure mysqli --with-mysqli=mysqlnd \
  && docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
  && docker-php-ext-configure gd --enable-gd-jis-conv --with-freetype --with-jpeg \
- && docker-php-ext-install exif gd mbstring intl xsl zip mysqli pdo_mysql \
- && docker-php-ext-enable opcache \
+ && docker-php-ext-install exif gd mbstring intl xsl zip mysqli pdo_mysql opcache \
  && docker-php-ext-configure pgsql \
  && docker-php-ext-install pgsql pdo_pgsql
 
