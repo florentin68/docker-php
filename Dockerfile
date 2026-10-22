@@ -125,9 +125,7 @@ RUN usermod -u $UID www-data && groupmod -g $GID www-data \
     && chown -R www-data:www-data /var/log \
     && touch /var/log/php_errors.log
 
-RUN export SUDO_FORCE_REMOVE=yes
-
-RUN apt-get remove -y --purge \
+RUN SUDO_FORCE_REMOVE=yes apt-get remove -y --purge \
     wget \
     curl \
     apt-utils \
