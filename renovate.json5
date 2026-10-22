@@ -6,7 +6,8 @@
     {
       "matchDatasources": ["docker"],
       "matchPackageNames": ["php"],
-      "allowedVersions": "/^8\\./"
+      "allowedVersions": "/^8\\./",
+      "automerge": true
     }
   ]
 }
