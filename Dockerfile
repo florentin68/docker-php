@@ -1,4 +1,4 @@
-FROM php:8.5-fpm-bookworm@sha256:d3db5340c7ecfb1e3a26af5d3d9de8b4e160cdd75692a830b5cb74b0b85db2cf
+FROM php:8.5-fpm-bookworm@sha256:75dc898a8861a777f14c57b2afbb811a848735701593cbc354e4194807a88f3e
 
 # Set labels for the image
 LABEL base_image="php:8.5-fpm-bookworm"
